@@ -58,10 +58,46 @@ body {
     align-items: center;
 
     & button {
+        background: url("../assets/tinder-icons.webp") no-repeat;
+        background-position: 0px 0px;
+        background-size: 175px;
         height: 32px;
         width: 32px;
         border-radius: 50%;
+        border: 0;
         border: 1px solid #ccc;
+        cursor: pointer;
+        transition: scale .3s ease;
+
+        &:hover {
+            scale: 1.4;
+        }
+
+        &.is-big {
+            background-size: 265px;
+            width: 48px;
+            height: 48px;
+        }
+
+        &.is-undo {
+            background-position: -143px -1px;
+        }
+
+        &.is-remove {
+            background-position:-162px -1px;
+        }
+
+        &.is-star {
+            background-position: -72px -1px;
+        }
+
+        &.is-fav {
+            background-position: -55px -1px;
+        }
+
+        &.is-zap {
+            background-position: -1px -1px;
+        }
     }
 }
 
