@@ -7,6 +7,8 @@ function startDrag (event) {
 
     // get the first article element
     const actualCard = event.target.closest("article");
+
+    // if not get a card return
     if (!actualCard) return
 
     // get initial position of mouse or finger
@@ -75,6 +77,8 @@ function startDrag (event) {
         } else {
             actualCard.classList.add("reset");
             actualCard.classList.remove("go-right", "go-left");
+            
+            actualCard.querySelectorAll(".choice").forEach(element => element.style.opacity = 0);
         };
 
         // reset the variables
