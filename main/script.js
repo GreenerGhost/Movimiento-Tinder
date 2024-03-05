@@ -1,3 +1,4 @@
+const DECISION_THRESHOLD = 80;
 let isAnimating = false;
 let pullDeltaX = 0; // distance from the card being dragged
 
@@ -38,7 +39,16 @@ function startDrag (event) {
         actualCard.style.transform = `translateX(${pullDeltaX}px) rotate(${deg}deg)`;
         // change the cursor to grabbing
         actualCard.style.cursor = "grabbing";
-    
+
+        // change opacity of the choice info
+        const opacity = Math.abs(pullDeltaX) / 100;
+        const isRight = pullDeltaX > 0;
+
+        const choiceEl = isRight
+            ? actualCard.querySelector(".choice.like")
+            : actualCard.querySelector(".choice.nope");
+        
+        choiceEl.style.opacity = opacity;
     };
     
     function onEnd (event) {
@@ -49,16 +59,32 @@ function startDrag (event) {
         document.removeEventListener("touchmove", onMove);
         document.removeEventListener("touchend", onEnd);
 
-        // TODO: TO REMOVE AS WE'RE DOING THIS OTHER WAY
+        // know if the usser takes a decision
+        const decisionMade = Math.abs(pullDeltaX) >= DECISION_THRESHOLD;
 
-        // reset the flag
-        isAnimating = false;
-        // reset the distance
-        pullDeltaX = 0;
-        // reset the transformation
-        actualCard.style.transform = "none";
-        // reset the cursor
-        actualCard.style.cursor = "grab";
+        if (decisionMade) {
+            const goRight = pullDeltaX >= 0;
+            const goLeft = !goRight;
+
+            // add class acording to the decision
+            actualCard.classList.add(goRight ? "go-right" : "go-left");
+
+            actualCard.addEventListener ("transitionend", () => {
+                actualCard.remove();
+            }, { once: true });
+        } else {
+            actualCard.classList.add("reset");
+            actualCard.classList.remove("go-right", "go-left");
+        };
+
+        // reset the variables
+        actualCard.addEventListener("transitionend", () => {
+            actualCard.removeAttribute("style");
+            actualCard.classList.remove("reset");
+
+            pullDeltaX = 0;
+            isAnimating = false;
+        });
     };
 };
 
